@@ -36,3 +36,6 @@ token.json
 
 # Created files
 output.json
+
+# Environment variables
+.env
