@@ -55,3 +55,35 @@ func GetSheetNames(spreadsheetId string) ([]string, error) {
 
 	return sheetNames, nil
 }
+
+// Read data from a specific sheet in the spreadsheet
+func ReadSheet(spreadsheetId, sheetName string) ([]map[string]interface{}, error) {
+	if err := InitSheetsService(); err != nil {
+		return nil, err
+	}
+
+	resp, err := srv.Spreadsheets.Values.Get(spreadsheetId, sheetName).Do()
+	if err != nil {
+		return nil, fmt.Errorf("unable to retrieve data from sheet: %v", err)
+	}
+
+	if len(resp.Values) == 0 {
+		return nil, fmt.Errorf("no data found in sheet: %s", sheetName)
+	}
+
+	var result []map[string]interface{}
+	headers := resp.Values[0]
+	for _, row := range resp.Values[1:] {
+		item := make(map[string]interface{})
+		for i, header := range headers {
+			if i < len(row) {
+				item[header.(string)] = row[i]
+			} else {
+				item[header.(string)] = ""
+			}
+		}
+		result = append(result, item)
+	}
+
+	return result, nil
+}

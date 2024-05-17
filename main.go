@@ -29,4 +29,15 @@ func main() {
 
 	fmt.Printf("Sheet names: %v\n", sheetNames)
 	fmt.Printf("Google Sheets API initialized successfully. Output file: %s\n", *outputFile)
+
+	data := make(map[string]interface{})
+	for _, sheetName := range sheetNames {
+		sheetData, err := sheets.ReadSheet(*spreadsheetId, sheetName)
+		if err != nil {
+			log.Fatalf("Unable to read Google Sheet data: %v", err)
+		}
+		data[sheetName] = sheetData
+	}
+
+	fmt.Printf("Data: %v\n", data)
 }
