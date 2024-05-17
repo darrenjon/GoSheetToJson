@@ -39,5 +39,9 @@ func main() {
 		data[sheetName] = sheetData
 	}
 
-	fmt.Printf("Data: %v\n", data)
+	if err := sheets.SaveToJson(*outputFile, data); err != nil {
+		log.Fatalf("Unable to save JSON file: %v", err)
+	}
+
+	fmt.Printf("Successfully saved data to %s\n", *outputFile)
 }
