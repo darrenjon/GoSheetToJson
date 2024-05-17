@@ -31,4 +31,8 @@ go.sum
 
 # API credentials
 credentials.json
+service_account.json
 token.json
+
+# Created files
+output.json
